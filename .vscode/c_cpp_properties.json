@@ -1,0 +1,22 @@
+{
+    "configurations": [
+        {
+            "name": "Windows",
+            "includePath": [
+                "${workspaceFolder}",
+                "${workspaceFolder}\\build\\_deps\\wxwidgets-src\\include\\**"
+            ],
+            "defines": [
+                "__WXMSW__",
+                "_UNICODE",
+                "_DEBUG"
+            ],
+            "compilerPath": "cl.exe",
+            "cStandard": "c11",
+            "cppStandard": "c++20",
+            "intelliSenseMode": "windows-msvc-x64",
+            "configurationProvider": "ms-vscode.cmake-tools"
+        }
+    ],
+    "version": 4
+}
