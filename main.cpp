@@ -27,12 +27,13 @@ enum
 bool MyApp::OnInit()
 {
     MyFrame *frame = new MyFrame();
+    frame->SetIcon(wxIcon("assets\\icon.ico", wxBITMAP_TYPE_ICO));
     frame->Show(true);
     return true;
 }
 
 MyFrame::MyFrame()
-    : wxFrame(nullptr, wxID_ANY, "Hello World")
+    : wxFrame(nullptr, wxID_ANY, "C++ Calculator")
 {
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
@@ -48,9 +49,6 @@ MyFrame::MyFrame()
     menuBar->Append(menuHelp, "&Help");
 
     SetMenuBar(menuBar);
-
-    CreateStatusBar();
-    SetStatusText("Welcome to wxWidgets!");
 
     Bind(wxEVT_MENU, &MyFrame::OnHello, this, ID_Hello);
     Bind(wxEVT_MENU, &MyFrame::OnAbout, this, wxID_ABOUT);
