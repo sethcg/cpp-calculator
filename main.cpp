@@ -26,6 +26,8 @@ enum
 
 bool MyApp::OnInit()
 {
+    MyApp::SetAppearance(Appearance::Dark);
+
     MyFrame *frame = new MyFrame();
     frame->SetIcon(wxIcon("assets\\icon.ico", wxBITMAP_TYPE_ICO));
     frame->Show(true);
