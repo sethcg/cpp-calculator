@@ -29,7 +29,7 @@ bool MyApp::OnInit()
 {
     MyApp::SetAppearance(Appearance::Dark);
 
-    MyFrame *frame = new MyFrame("Calculator", wxDefaultPosition, wxDefaultSize);
+    MyFrame *frame = new MyFrame("Calculator", wxDefaultPosition, wxSize(270, 360));
     frame->SetIcon(wxIcon("assets\\icon.ico", wxBITMAP_TYPE_ICO));
     frame->Show(true);
     return true;
@@ -39,9 +39,9 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
     : wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
 
-    const auto GRAY = wxColour(67, 67, 67, wxALPHA_OPAQUE);         // HEX: #434343
-    const auto DARK_GRAY = wxColour(45, 45, 45, wxALPHA_OPAQUE);    // HEX: #2d2d2d
-    const auto LIGHT_BLUE = wxColour(75, 205, 255, wxALPHA_OPAQUE); // HEX: #24b2e5
+    const auto GRAY = wxColour(67, 67, 67, wxALPHA_OPAQUE);          // HEX: #434343
+    const auto DARK_GRAY = wxColour(45, 45, 45, wxALPHA_OPAQUE);     // HEX: #2d2d2d
+    const auto LIGHT_BLUE = wxColour(135, 206, 235, wxALPHA_OPAQUE); // HEX: #87ceeb
 
     // TODO: Switch to using wxBitmapButton instead and SVG images for more clear results
     std::vector<std::pair<wxString, wxColour>> buttons = {
@@ -71,17 +71,43 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
         {"\u003D", LIGHT_BLUE},                                          // EQUAL
     };
 
-    // TODO: Add the text output box for number display
+    // TODO: Resize fontsize when window changes, get bigger/smaller depending on window size
+    const auto TEXT_HORIZONTAL_MARGIN = FromDIP(10);
 
-    const auto GRID_MARGIN = FromDIP(5);
-    const auto GRID_ROWS = 6;
-    const auto GRID_COLS = 4;
-    auto gridSizer = new wxGridSizer(GRID_ROWS, GRID_COLS, GRID_MARGIN, GRID_MARGIN);
+    auto *textPanel = new wxPanel(this, wxID_ANY);
+    textPanel->SetBackgroundColour(wxColour(45, 45, 45, wxALPHA_OPAQUE));
+    auto textContainer = new wxBoxSizer(wxHORIZONTAL);
+    auto textInnerContainer = new wxBoxSizer(wxVERTICAL);
+    auto previousText = new wxStaticText(textPanel, wxID_ANY, "+ 7800", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxEXPAND);
+    auto currentText = new wxStaticText(textPanel, wxID_ANY, "1000", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxEXPAND);
 
+    // SET THE FONT SIZE
+    previousText->SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+    currentText->SetFont(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+
+    textInnerContainer->Add(previousText, 1, wxEXPAND, 0);
+    textInnerContainer->Add(currentText, 1, wxEXPAND, 0);
+    textContainer->AddSpacer(TEXT_HORIZONTAL_MARGIN);
+    textContainer->Add(textInnerContainer, 1, wxEXPAND, 0);
+    textContainer->AddSpacer(TEXT_HORIZONTAL_MARGIN);
+    textPanel->SetSizer(textContainer);
+
+    const auto BUTTON_GRID_MARGIN = FromDIP(5);
+    const auto BUTTON_GRID_ROWS = 6;
+    const auto BUTTON_GRID_COLS = 4;
+    auto buttonContainer = new wxGridSizer(BUTTON_GRID_ROWS, BUTTON_GRID_COLS, BUTTON_GRID_MARGIN, BUTTON_GRID_MARGIN);
+
+    // TODO: Update text display with button clicks
+    // TODO: Formalize button creation, color, text color etc. in a custom initialize method
     for (const auto &[label, color] : buttons)
     {
         auto button = new wxButton(this, wxID_ANY, label, wxDefaultPosition, wxDefaultSize, wxEXPAND);
-        gridSizer->Add(button, 1, wxEXPAND, 5);
+        button->SetBackgroundColour(color);
+        if (label == "\u003D")
+        {
+            button->SetForegroundColour(*wxBLACK);
+        }
+        buttonContainer->Add(button, 1, wxEXPAND, 5);
     }
 
     wxMenu *menuFile = new wxMenu;
@@ -105,10 +131,11 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
 
     // ALWAYS FIT THE CONTENT ON THE FRAME/WINDOW WHEN ADJUSTING HEIGHT OR WIDTH
     const auto MARGIN = FromDIP(30);
-
     auto sizer = new wxBoxSizer(wxVERTICAL);
-    sizer->Add(gridSizer, 1, wxEXPAND, MARGIN);
+    sizer->Add(textPanel, 0, wxEXPAND, MARGIN);
+    sizer->Add(buttonContainer, 1, wxEXPAND, MARGIN);
     SetSizer(sizer);
+    SetMinSize(wxSize(210, 270));
 
     Center();
 }
