@@ -1,6 +1,6 @@
 cmake_minimum_required(VERSION 3.14 FATAL_ERROR)
 
-project(wx_cmake_fetchcontent_template LANGUAGES CXX)
+project(cpp_calculator LANGUAGES CXX)
 
 include(FetchContent)
 
@@ -18,7 +18,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(wxWidgets)
 
-set(SRCS main.cpp)
+set(SRCS ./src/main.cpp)
 
 add_executable(main WIN32 ${SRCS})
 

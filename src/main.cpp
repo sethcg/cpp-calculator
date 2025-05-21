@@ -9,10 +9,10 @@ public:
 
 wxIMPLEMENT_APP(MyApp);
 
-class MyFrame : public wxFrame
+class CalculatorFrame : public wxFrame
 {
 public:
-    MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
+    CalculatorFrame(const wxString &title, const wxPoint &pos, const wxSize &size);
 
 private:
     void OnHello(wxCommandEvent &event);
@@ -29,13 +29,13 @@ bool MyApp::OnInit()
 {
     MyApp::SetAppearance(Appearance::Dark);
 
-    MyFrame *frame = new MyFrame("Calculator", wxDefaultPosition, wxSize(270, 360));
+    CalculatorFrame *frame = new CalculatorFrame("Calculator", wxDefaultPosition, wxSize(270, 360));
     frame->SetIcon(wxIcon("assets\\icon.ico", wxBITMAP_TYPE_ICO));
     frame->Show(true);
     return true;
 }
 
-MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
+CalculatorFrame::CalculatorFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
     : wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
 
@@ -72,20 +72,21 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
     };
 
     // TODO: Resize fontsize when window changes, get bigger/smaller depending on window size
+    // TODO: Implement entry history, with "previousText" variable storing last calculation
     const auto TEXT_HORIZONTAL_MARGIN = FromDIP(10);
 
-    auto *textPanel = new wxPanel(this, wxID_ANY);
+    auto *textPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize);
     textPanel->SetBackgroundColour(wxColour(45, 45, 45, wxALPHA_OPAQUE));
     auto textContainer = new wxBoxSizer(wxHORIZONTAL);
     auto textInnerContainer = new wxBoxSizer(wxVERTICAL);
-    auto previousText = new wxStaticText(textPanel, wxID_ANY, "+ 7800", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxEXPAND);
-    auto currentText = new wxStaticText(textPanel, wxID_ANY, "1000", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxEXPAND);
+    // auto previousText = new wxStaticText(textPanel, wxID_ANY, "+ 7800", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxEXPAND);
+    auto currentText = new wxStaticText(textPanel, wxID_ANY, "0", wxDefaultPosition, wxDefaultSize, wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxEXPAND);
 
     // SET THE FONT SIZE
-    previousText->SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
+    // previousText->SetFont(wxFont(10, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_NORMAL));
     currentText->SetFont(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
 
-    textInnerContainer->Add(previousText, 1, wxEXPAND, 0);
+    // textInnerContainer->Add(previousText, 1, wxEXPAND, 0);
     textInnerContainer->Add(currentText, 1, wxEXPAND, 0);
     textContainer->AddSpacer(TEXT_HORIZONTAL_MARGIN);
     textContainer->Add(textInnerContainer, 1, wxEXPAND, 0);
@@ -125,9 +126,9 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
 
     SetMenuBar(menuBar);
 
-    Bind(wxEVT_MENU, &MyFrame::OnHello, this, ID_Hello);
-    Bind(wxEVT_MENU, &MyFrame::OnAbout, this, wxID_ABOUT);
-    Bind(wxEVT_MENU, &MyFrame::OnExit, this, wxID_EXIT);
+    Bind(wxEVT_MENU, &CalculatorFrame::OnHello, this, ID_Hello);
+    Bind(wxEVT_MENU, &CalculatorFrame::OnAbout, this, wxID_ABOUT);
+    Bind(wxEVT_MENU, &CalculatorFrame::OnExit, this, wxID_EXIT);
 
     // ALWAYS FIT THE CONTENT ON THE FRAME/WINDOW WHEN ADJUSTING HEIGHT OR WIDTH
     const auto MARGIN = FromDIP(30);
@@ -140,18 +141,18 @@ MyFrame::MyFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
     Center();
 }
 
-void MyFrame::OnExit(wxCommandEvent &event)
+void CalculatorFrame::OnExit(wxCommandEvent &event)
 {
     Close(true);
 }
 
-void MyFrame::OnAbout(wxCommandEvent &event)
+void CalculatorFrame::OnAbout(wxCommandEvent &event)
 {
     wxMessageBox("This is a wxWidgets Hello World example",
                  "About Hello World", wxOK | wxICON_INFORMATION);
 }
 
-void MyFrame::OnHello(wxCommandEvent &event)
+void CalculatorFrame::OnHello(wxCommandEvent &event)
 {
     wxLogMessage("Hello world from wxWidgets!");
 }
