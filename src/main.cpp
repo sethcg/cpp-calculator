@@ -9,6 +9,22 @@ public:
 
 wxIMPLEMENT_APP(MyApp);
 
+class CalculatorButton : public wxButton
+{
+public:
+    CalculatorButton(wxWindow *parent, const wxWindowID &id, const wxString &label, const wxPoint &pos, const wxSize &size, const wxColor &color, const wxColor &textColor = *wxWHITE);
+
+private:
+    void OnClick(wxCommandEvent &event);
+};
+
+CalculatorButton::CalculatorButton(wxWindow *parent, const wxWindowID &id, const wxString &label, const wxPoint &pos, const wxSize &size, const wxColor &color, const wxColor &textColor)
+    : wxButton(parent, id, label, pos, size, wxEXPAND)
+{
+    this->SetBackgroundColour(color);
+    this->SetForegroundColour(textColor);
+}
+
 class CalculatorFrame : public wxFrame
 {
 public:
@@ -38,39 +54,6 @@ bool MyApp::OnInit()
 CalculatorFrame::CalculatorFrame(const wxString &title, const wxPoint &pos, const wxSize &size)
     : wxFrame(nullptr, wxID_ANY, title, pos, size)
 {
-
-    const auto GRAY = wxColour(67, 67, 67, wxALPHA_OPAQUE);          // HEX: #434343
-    const auto DARK_GRAY = wxColour(45, 45, 45, wxALPHA_OPAQUE);     // HEX: #2d2d2d
-    const auto LIGHT_BLUE = wxColour(135, 206, 235, wxALPHA_OPAQUE); // HEX: #87ceeb
-
-    // TODO: Switch to using wxBitmapButton instead and SVG images for more clear results
-    std::vector<std::pair<wxString, wxColour>> buttons = {
-        {"\u0025", DARK_GRAY},                                           // %, PERCENTAGE
-        {"CE", DARK_GRAY},                                               // CE, CLEAR ENTRY
-        {"C", DARK_GRAY},                                                // C, CLEAR (ALL)
-        {"DEL", DARK_GRAY},                                              // DEL, DELETE DIGIT
-        {wxString::FromUTF8("\xE2\x85\x9F\xF0\x9D\x93\x8D"), DARK_GRAY}, // FRACTION
-        {wxString::FromUTF8("\xF0\x9D\x93\x8D\xC2\xB2"), DARK_GRAY},     // SQUARE
-        {wxString::FromUTF8("\xE2\x88\x9A\xF0\x9D\x93\x8D"), DARK_GRAY}, // SQUARE ROOT
-        {"\u00F7", DARK_GRAY},                                           // DIVIDE
-        {"7", GRAY},                                                     // 7
-        {"8", GRAY},                                                     // 8
-        {"9", GRAY},                                                     // 9
-        {"x", DARK_GRAY},                                                // MULTIPLY
-        {"4", GRAY},                                                     // 4
-        {"5", GRAY},                                                     // 5
-        {"6", GRAY},                                                     // 6
-        {"\u002D", DARK_GRAY},                                           // SUBTRACT
-        {"1", GRAY},                                                     // 1
-        {"2", GRAY},                                                     // 2
-        {"3", GRAY},                                                     // 3
-        {"\u002B", DARK_GRAY},                                           // ADD
-        {wxString::FromUTF8("\xE2\x81\xBA\xCC\xB8\xE2\x82\x8B"), GRAY},  // NEGATE (POSITIVE/NEGATIVE)
-        {"0", GRAY},                                                     // 0
-        {"\u002E", GRAY},                                                // DECIMAL
-        {"\u003D", LIGHT_BLUE},                                          // EQUAL
-    };
-
     // TODO: Resize fontsize when window changes, get bigger/smaller depending on window size
     // TODO: Implement entry history, with "previousText" variable storing last calculation
     const auto TEXT_HORIZONTAL_MARGIN = FromDIP(10);
@@ -98,18 +81,36 @@ CalculatorFrame::CalculatorFrame(const wxString &title, const wxPoint &pos, cons
     const auto BUTTON_GRID_COLS = 4;
     auto buttonContainer = new wxGridSizer(BUTTON_GRID_ROWS, BUTTON_GRID_COLS, BUTTON_GRID_MARGIN, BUTTON_GRID_MARGIN);
 
+    const auto GRAY = wxColour(67, 67, 67, wxALPHA_OPAQUE);          // HEX: #434343
+    const auto DARK_GRAY = wxColour(45, 45, 45, wxALPHA_OPAQUE);     // HEX: #2d2d2d
+    const auto LIGHT_BLUE = wxColour(135, 206, 235, wxALPHA_OPAQUE); // HEX: #87ceeb
+
+    // TODO: Switch to using wxBitmapButton instead and SVG images for more clear results
     // TODO: Update text display with button clicks
-    // TODO: Formalize button creation, color, text color etc. in a custom initialize method
-    for (const auto &[label, color] : buttons)
-    {
-        auto button = new wxButton(this, wxID_ANY, label, wxDefaultPosition, wxDefaultSize, wxEXPAND);
-        button->SetBackgroundColour(color);
-        if (label == "\u003D")
-        {
-            button->SetForegroundColour(*wxBLACK);
-        }
-        buttonContainer->Add(button, 1, wxEXPAND, 5);
-    }
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "\u0025", wxDefaultPosition, wxDefaultSize, DARK_GRAY), 1, wxEXPAND, 5);                                           // %, PERCENTAGE
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "CE", wxDefaultPosition, wxDefaultSize, DARK_GRAY), 1, wxEXPAND, 5);                                               // CE, CLEAR ENTRY
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "C", wxDefaultPosition, wxDefaultSize, DARK_GRAY), 1, wxEXPAND, 5);                                                // C, CLEAR (ALL)
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "DEL", wxDefaultPosition, wxDefaultSize, DARK_GRAY), 1, wxEXPAND, 5);                                              // DEL, DELETE DIGIT
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, wxString::FromUTF8("\xE2\x85\x9F\xF0\x9D\x93\x8D"), wxDefaultPosition, wxDefaultSize, DARK_GRAY), 1, wxEXPAND, 5); // FRACTION
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, wxString::FromUTF8("\xF0\x9D\x93\x8D\xC2\xB2"), wxDefaultPosition, wxDefaultSize, DARK_GRAY), 1, wxEXPAND, 5);     // SQUARE
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, wxString::FromUTF8("\xE2\x88\x9A\xF0\x9D\x93\x8D"), wxDefaultPosition, wxDefaultSize, DARK_GRAY), 1, wxEXPAND, 5); // SQUARE ROOT
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "\u00F7", wxDefaultPosition, wxDefaultSize, DARK_GRAY), 1, wxEXPAND, 5);                                           // DIVIDE
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "7", wxDefaultPosition, wxDefaultSize, GRAY), 1, wxEXPAND, 5);                                                     // 7
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "8", wxDefaultPosition, wxDefaultSize, GRAY), 1, wxEXPAND, 5);                                                     // 8
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "9", wxDefaultPosition, wxDefaultSize, GRAY), 1, wxEXPAND, 5);                                                     // 9
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "x", wxDefaultPosition, wxDefaultSize, DARK_GRAY), 1, wxEXPAND, 5);                                                // MULTIPLY
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "4", wxDefaultPosition, wxDefaultSize, GRAY), 1, wxEXPAND, 5);                                                     // 4
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "5", wxDefaultPosition, wxDefaultSize, GRAY), 1, wxEXPAND, 5);                                                     // 5
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "6", wxDefaultPosition, wxDefaultSize, GRAY), 1, wxEXPAND, 5);                                                     // 6
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "\u002D", wxDefaultPosition, wxDefaultSize, DARK_GRAY), 1, wxEXPAND, 5);                                           // SUBTRACT
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "1", wxDefaultPosition, wxDefaultSize, GRAY), 1, wxEXPAND, 5);                                                     // 1
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "2", wxDefaultPosition, wxDefaultSize, GRAY), 1, wxEXPAND, 5);                                                     // 2
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "3", wxDefaultPosition, wxDefaultSize, GRAY), 1, wxEXPAND, 5);                                                     // 3
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "\u002D", wxDefaultPosition, wxDefaultSize, DARK_GRAY), 1, wxEXPAND, 5);                                           // ADD
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, wxString::FromUTF8("\xE2\x81\xBA\xCC\xB8\xE2\x82\x8B"), wxDefaultPosition, wxDefaultSize, GRAY), 1, wxEXPAND, 5);  // NEGATE (POSITIVE/NEGATIVE)
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "0", wxDefaultPosition, wxDefaultSize, GRAY), 1, wxEXPAND, 5);                                                     // 0
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "\u002E", wxDefaultPosition, wxDefaultSize, GRAY), 1, wxEXPAND, 5);                                                // DECIMAL
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "\u003D", wxDefaultPosition, wxDefaultSize, LIGHT_BLUE, *wxBLACK), 1, wxEXPAND, 5);                                // EQUAL
 
     wxMenu *menuFile = new wxMenu;
     menuFile->Append(ID_Hello, "&Hello...\tCtrl-H",
