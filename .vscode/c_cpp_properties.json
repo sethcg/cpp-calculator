@@ -4,7 +4,8 @@
             "name": "Windows",
             "includePath": [
                 "${workspaceFolder}",
-                "${workspaceFolder}\\build\\_deps\\wxwidgets-src\\include\\**"
+                "${workspaceFolder}\\build\\_deps\\wxwidgets-src\\include\\**",
+                "${workspaceFolder}\\src\\colors\\**"
             ],
             "defines": [
                 "__WXMSW__",

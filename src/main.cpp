@@ -1,5 +1,6 @@
 #include <wx/wx.h>
 #include <vector>
+#include <colors/colors.h>
 
 class MyApp : public wxApp
 {
@@ -81,13 +82,9 @@ CalculatorFrame::CalculatorFrame(const wxString &title, const wxPoint &pos, cons
     const auto BUTTON_GRID_COLS = 4;
     auto buttonContainer = new wxGridSizer(BUTTON_GRID_ROWS, BUTTON_GRID_COLS, BUTTON_GRID_MARGIN, BUTTON_GRID_MARGIN);
 
-    const auto GRAY = wxColour(67, 67, 67, wxALPHA_OPAQUE);          // HEX: #434343
-    const auto DARK_GRAY = wxColour(45, 45, 45, wxALPHA_OPAQUE);     // HEX: #2d2d2d
-    const auto LIGHT_BLUE = wxColour(135, 206, 235, wxALPHA_OPAQUE); // HEX: #87ceeb
-
     // TODO: Switch to using wxBitmapButton instead and SVG images for more clear results
     // TODO: Update text display with button clicks
-    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "\u0025", wxDefaultPosition, wxDefaultSize, DARK_GRAY), 1, wxEXPAND, 5);                                           // %, PERCENTAGE
+    buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "\u0025", wxDefaultPosition, wxDefaultSize, GRAY), 1, wxEXPAND, 5);                                                // %, PERCENTAGE
     buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "CE", wxDefaultPosition, wxDefaultSize, DARK_GRAY), 1, wxEXPAND, 5);                                               // CE, CLEAR ENTRY
     buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "C", wxDefaultPosition, wxDefaultSize, DARK_GRAY), 1, wxEXPAND, 5);                                                // C, CLEAR (ALL)
     buttonContainer->Add(new CalculatorButton(this, wxID_ANY, "DEL", wxDefaultPosition, wxDefaultSize, DARK_GRAY), 1, wxEXPAND, 5);                                              // DEL, DELETE DIGIT

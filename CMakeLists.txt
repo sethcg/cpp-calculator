@@ -18,8 +18,19 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(wxWidgets)
 
-set(SRCS ./src/main.cpp)
+set(MAIN_FILE ./src/main.cpp)
 
-add_executable(main WIN32 ${SRCS})
+add_executable(main WIN32 ${MAIN_FILE})
+
+target_sources(main
+PRIVATE
+    ${MAIN_FILE}
+
+    ./src/colors/colors.h
+)
+
+target_include_directories(main
+    PUBLIC
+    ${CMAKE_CURRENT_LIST_DIR}/src/)
 
 target_link_libraries(main PRIVATE wxcore wxnet)
