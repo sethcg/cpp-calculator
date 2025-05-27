@@ -24,9 +24,12 @@ add_executable(main WIN32 ${MAIN_FILE})
 
 target_sources(main
 PRIVATE
-    ${MAIN_FILE}
+   ${MAIN_FILE}
 
-    ./src/colors/colors.h
+   ./src/calculatorbutton.cpp
+
+   ./src/calculatorbutton.h
+   ./src/colors/colors.h
 )
 
 target_include_directories(main

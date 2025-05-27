@@ -5,6 +5,7 @@
             "includePath": [
                 "${workspaceFolder}",
                 "${workspaceFolder}\\build\\_deps\\wxwidgets-src\\include\\**",
+                "${workspaceFolder}\\src\\**",
                 "${workspaceFolder}\\src\\colors\\**"
             ],
             "defines": [

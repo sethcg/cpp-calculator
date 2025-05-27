@@ -1,6 +1,7 @@
 #include <wx/wx.h>
 #include <vector>
 #include <colors/colors.h>
+#include <calculatorbutton.h>
 
 class MyApp : public wxApp
 {
@@ -9,22 +10,6 @@ public:
 };
 
 wxIMPLEMENT_APP(MyApp);
-
-class CalculatorButton : public wxButton
-{
-public:
-    CalculatorButton(wxWindow *parent, const wxWindowID &id, const wxString &label, const wxPoint &pos, const wxSize &size, const wxColor &color, const wxColor &textColor = *wxWHITE);
-
-private:
-    void OnClick(wxCommandEvent &event);
-};
-
-CalculatorButton::CalculatorButton(wxWindow *parent, const wxWindowID &id, const wxString &label, const wxPoint &pos, const wxSize &size, const wxColor &color, const wxColor &textColor)
-    : wxButton(parent, id, label, pos, size, wxEXPAND)
-{
-    this->SetBackgroundColour(color);
-    this->SetForegroundColour(textColor);
-}
 
 class CalculatorFrame : public wxFrame
 {
