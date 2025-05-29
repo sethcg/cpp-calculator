@@ -18,7 +18,7 @@ FetchContent_Declare(
 )
 FetchContent_MakeAvailable(wxWidgets)
 
-set(MAIN_FILE ./src/main.cpp)
+set(MAIN_FILE ./main.cpp)
 
 add_executable(main WIN32 ${MAIN_FILE})
 
@@ -26,8 +26,10 @@ target_sources(main
 PRIVATE
    ${MAIN_FILE}
 
+   ./src/buttoncontainer.cpp
    ./src/calculatorbutton.cpp
 
+   ./src/buttoncontainer.h
    ./src/calculatorbutton.h
    ./src/colors/colors.h
 )
