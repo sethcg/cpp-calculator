@@ -4,8 +4,5 @@
 class CalculatorButton : public wxButton
 {
 public:
-    CalculatorButton(wxWindow *parent, const wxWindowID &id, wxTextCtrl *currentTextControl, const wxString &label, const wxColor &backgroundColor, const wxColor &textColor = *wxWHITE);
-
-private:
-    void SetTextLabel(wxTextCtrl *currentTextControl);
+    CalculatorButton(std::function<void()> onClick, wxWindow *parent, wxTextCtrl *textControl, const wxWindowID &id, const wxString &label, const wxColor &backgroundColor, const wxColor &textColor);
 };
