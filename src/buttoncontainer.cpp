@@ -14,76 +14,76 @@ ButtonContainer::ButtonContainer(wxWindow *parent, wxTextCtrl *textControl) : wx
         buttons({
             // %, PERCENTAGE
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("\u0025"); }, parent, textControl, wxID_ANY, "\u0025", DARK_GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_PERCENT); }, parent, textControl, BUTTON_STRING_PERCENT, DARK_GRAY),
             // CE, CLEAR ENTRY
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("CE"); }, parent, textControl, wxID_ANY, "CE", DARK_GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_CLEAR_ENTRY); }, parent, textControl, BUTTON_STRING_CLEAR_ENTRY, DARK_GRAY),
             // C, CLEAR (ALL)
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("C"); }, parent, textControl, wxID_ANY, "C", DARK_GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_CLEAR_ALL); }, parent, textControl, BUTTON_STRING_CLEAR_ALL, DARK_GRAY),
             // DEL, DELETE DIGIT
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("DEL"); }, parent, textControl, wxID_ANY, "DEL", DARK_GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_DELETE); }, parent, textControl, BUTTON_STRING_DELETE, DARK_GRAY),
             // FRACTION
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue(wxString::FromUTF8("\xE2\x85\x9F\xF0\x9D\x93\x8D")); }, parent, textControl, wxID_ANY, wxString::FromUTF8("\xE2\x85\x9F\xF0\x9D\x93\x8D"), DARK_GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_FRACTION); }, parent, textControl, BUTTON_STRING_FRACTION, DARK_GRAY),
             // SQUARE
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue(wxString::FromUTF8("\xF0\x9D\x93\x8D\xC2\xB2")); }, parent, textControl, wxID_ANY, wxString::FromUTF8("\xF0\x9D\x93\x8D\xC2\xB2"), DARK_GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_SQUARE); }, parent, textControl, BUTTON_STRING_SQUARE, DARK_GRAY),
             // SQUARE ROOT
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue(wxString::FromUTF8("\xE2\x88\x9A\xF0\x9D\x93\x8D")); }, parent, textControl, wxID_ANY, wxString::FromUTF8("\xE2\x88\x9A\xF0\x9D\x93\x8D"), DARK_GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_SQUARE_ROOT); }, parent, textControl, BUTTON_STRING_SQUARE_ROOT, DARK_GRAY),
             // DIVIDE
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("\u00F7"); }, parent, textControl, wxID_ANY, "\u00F7", DARK_GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_DIVIDE); }, parent, textControl, BUTTON_STRING_DIVIDE, DARK_GRAY),
             // 7
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("7"); }, parent, textControl, wxID_ANY, "7", GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_SEVEN_DIGIT); }, parent, textControl, BUTTON_STRING_SEVEN_DIGIT, GRAY),
             // 8
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("8"); }, parent, textControl, wxID_ANY, "8", GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_EIGHT_DIGIT); }, parent, textControl, BUTTON_STRING_EIGHT_DIGIT, GRAY),
             // 9
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("9"); }, parent, textControl, wxID_ANY, "9", GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_NINE_DIGIT); }, parent, textControl, BUTTON_STRING_NINE_DIGIT, GRAY),
             // MULTIPLY
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("x"); }, parent, textControl, wxID_ANY, "x", DARK_GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_MULTIPLY); }, parent, textControl, BUTTON_STRING_MULTIPLY, DARK_GRAY),
             // 4
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("4"); }, parent, textControl, wxID_ANY, "4", GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_FOUR_DIGIT); }, parent, textControl, BUTTON_STRING_FOUR_DIGIT, GRAY),
             // 5
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("5"); }, parent, textControl, wxID_ANY, "5", GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_FIVE_DIGIT); }, parent, textControl, BUTTON_STRING_FIVE_DIGIT, GRAY),
             // 6
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("6"); }, parent, textControl, wxID_ANY, "6", GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_SIX_DIGIT); }, parent, textControl, BUTTON_STRING_SIX_DIGIT, GRAY),
             // SUBTRACT
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("\u002D"); }, parent, textControl, wxID_ANY, "\u002D", DARK_GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_SUBTRACT); }, parent, textControl, BUTTON_STRING_SUBTRACT, DARK_GRAY),
             // 1
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("1"); }, parent, textControl, wxID_ANY, "1", GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_ONE_DIGIT); }, parent, textControl, BUTTON_STRING_ONE_DIGIT, GRAY),
             // 2
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("2"); }, parent, textControl, wxID_ANY, "2", GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_TWO_DIGIT); }, parent, textControl, BUTTON_STRING_TWO_DIGIT, GRAY),
             // 3
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("3"); }, parent, textControl, wxID_ANY, "3", GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_THREE_DIGIT); }, parent, textControl, BUTTON_STRING_THREE_DIGIT, GRAY),
             // ADD
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("\u00B1"); }, parent, textControl, wxID_ANY, "\u00B1", DARK_GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_ADD); }, parent, textControl, BUTTON_STRING_ADD, DARK_GRAY),
             // NEGATE (POSITIVE/NEGATIVE)
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue(wxString::FromUTF8("\xE2\x81\xBA\xCC\xB8\xE2\x82\x8B")); }, parent, textControl, wxID_ANY, wxString::FromUTF8("\xE2\x81\xBA\xCC\xB8\xE2\x82\x8B"), GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_NEGATE); }, parent, textControl, BUTTON_STRING_NEGATE, GRAY),
             // 0
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("0"); }, parent, textControl, wxID_ANY, "0", GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_ZERO_DIGIT); }, parent, textControl, BUTTON_STRING_ZERO_DIGIT, GRAY),
             // DECIMAL
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("\u002E"); }, parent, textControl, wxID_ANY, "\u002E", GRAY, *wxWHITE),
+                                 { textControl->SetValue(BUTTON_STRING_DECIMAL); }, parent, textControl, BUTTON_STRING_DECIMAL, GRAY),
             // EQUAL
             new CalculatorButton([textControl]() -> void
-                                 { textControl->SetValue("\u003D"); }, parent, textControl, wxID_ANY, "\u003D", LIGHT_BLUE, *wxBLACK),
+                                 { textControl->SetValue(BUTTON_STRING_EQUAL); }, parent, textControl, BUTTON_STRING_EQUAL, LIGHT_BLUE, *wxBLACK),
         });
 
     // ADD BUTTONS TO CONTAINER
