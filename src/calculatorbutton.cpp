@@ -1,11 +1,23 @@
 #include <wx/wx.h>
-#include <calculatorbutton.h>
+#include <colors/Colors.h>
+#include <CalculatorButton.h>
+
+CalculatorButton::CalculatorButton(std::function<void()> onClick, wxWindow *parent, wxTextCtrl *textControl, const wxString &label)
+    : wxButton(parent, wxID_ANY, label, wxDefaultPosition, wxDefaultSize, wxEXPAND)
+{
+    this->SetBackgroundColour(COLOR_GRAY);
+    this->SetForegroundColour(*wxWHITE);
+    this->SetFont(wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_SEMIBOLD));
+    this->Bind(wxEVT_BUTTON, [onClick](wxCommandEvent &event) -> void
+               { onClick(); }, wxID_ANY);
+}
 
 CalculatorButton::CalculatorButton(std::function<void()> onClick, wxWindow *parent, wxTextCtrl *textControl, const wxString &label, const wxColor &backgroundColor)
     : wxButton(parent, wxID_ANY, label, wxDefaultPosition, wxDefaultSize, wxEXPAND)
 {
     this->SetBackgroundColour(backgroundColor);
     this->SetForegroundColour(*wxWHITE);
+    this->SetFont(wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_SEMIBOLD));
     this->Bind(wxEVT_BUTTON, [onClick](wxCommandEvent &event) -> void
                { onClick(); }, wxID_ANY);
 }
@@ -15,6 +27,7 @@ CalculatorButton::CalculatorButton(std::function<void()> onClick, wxWindow *pare
 {
     this->SetBackgroundColour(backgroundColor);
     this->SetForegroundColour(textColor);
+    this->SetFont(wxFont(12, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_SEMIBOLD));
     this->Bind(wxEVT_BUTTON, [onClick](wxCommandEvent &event) -> void
                { onClick(); }, wxID_ANY);
 }

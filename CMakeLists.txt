@@ -26,12 +26,12 @@ target_sources(main
 PRIVATE
    ${MAIN_FILE}
 
-   ./src/buttoncontainer.cpp
-   ./src/calculatorbutton.cpp
+   ./src/ButtonGrid.cpp
+   ./src/CalculatorButton.cpp
 
-   ./src/buttoncontainer.h
-   ./src/calculatorbutton.h
-   ./src/colors/colors.h
+   ./src/ButtonGrid.h
+   ./src/CalculatorButton.h
+   ./src/colors/Colors.h
 )
 
 target_include_directories(main

@@ -1,13 +1,13 @@
 #pragma once
 #include <wx/wx.h>
 
-inline const int BUTTON_CONTAINER_ROWS = 6;
+inline const int BUTTON_CONTAINER_ROWS = 5;
 inline const int BUTTON_CONTAINER_COLS = 4;
 
-class ButtonContainer : public wxGridSizer
+class ButtonGrid : public wxGridSizer
 {
 public:
-    ButtonContainer(wxWindow *parent, wxTextCtrl *textControl);
+    ButtonGrid(wxWindow *parent, wxTextCtrl *textControl);
 
 private:
     void CreateButton(wxGridSizer *container, CalculatorButton *button);
