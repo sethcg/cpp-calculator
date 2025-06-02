@@ -63,7 +63,8 @@ CalculatorFrame::CalculatorFrame(const wxString &title, const wxPoint &pos, cons
     auto buttonContainer = new wxBoxSizer(wxHORIZONTAL);
     auto buttonInnerContainer = new wxBoxSizer(wxVERTICAL);
 
-    auto buttonGrid = new ButtonGrid(this, currentTextControl);
+    auto operation = OperationType::NONE;
+    auto buttonGrid = new ButtonGrid(this, currentTextControl, &operation);
 
     const int BUTTON_CONTAINER_VERTICAL_MARGIN = FromDIP(5);
     buttonInnerContainer->AddSpacer(BUTTON_CONTAINER_VERTICAL_MARGIN);
