@@ -14,6 +14,7 @@ message(STATUS "Fetching wxWidgets...")
 FetchContent_Declare(
    wxWidgets
    GIT_REPOSITORY https://github.com/wxWidgets/wxWidgets.git
+   GIT_TAG v3.3.0-rc1   # LATEST PRE-RELEASE
    GIT_SHALLOW ON
 )
 FetchContent_MakeAvailable(wxWidgets)
@@ -27,9 +28,11 @@ PRIVATE
    ${MAIN_FILE}
 
    ./src/ButtonGrid.cpp
+   ./src/TextControl.cpp
    ./src/CalculatorButton.cpp
 
    ./src/ButtonGrid.h
+   ./src/TextControl.h
    ./src/CalculatorButton.h
    ./src/colors/Colors.h
 )

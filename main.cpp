@@ -1,6 +1,7 @@
 #include <wx/wx.h>
 #include <vector>
 #include <colors/Colors.h>
+#include <TextControl.h>
 #include <CalculatorButton.h>
 #include <ButtonGrid.h>
 
@@ -23,6 +24,7 @@ bool MyApp::OnInit()
     MyApp::SetAppearance(Appearance::Dark);
 
     CalculatorFrame *frame = new CalculatorFrame(wxString(), wxDefaultPosition, wxSize(270, 360));
+    frame->SetBackgroundColour(wxColour(10, 10, 10, wxALPHA_OPAQUE));
     frame->SetIcon(wxIcon("assets\\icon.ico", wxBITMAP_TYPE_ICO));
     frame->Bind(wxEVT_CONTEXT_MENU, [](wxContextMenuEvent &event) {});
     frame->Bind(wxEVT_MENU, [](wxCommandEvent &event) {});
@@ -37,17 +39,21 @@ CalculatorFrame::CalculatorFrame(const wxString &title, const wxPoint &pos, cons
 {
     // INITIALIZE TEXT DISPLAY
     auto *textPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0);
-    textPanel->SetBackgroundColour(wxColour(45, 45, 45, wxALPHA_OPAQUE));
+    textPanel->SetBackgroundColour(wxColour(20, 20, 20, wxALPHA_OPAQUE));
 
     auto textContainer = new wxBoxSizer(wxHORIZONTAL);
     auto textInnerContainer = new wxBoxSizer(wxVERTICAL);
 
-    auto *currentTextControl = new wxTextCtrl(textPanel, wxID_ANY, "0", wxDefaultPosition, wxDefaultSize, wxTE_READONLY);
-    currentTextControl->SetWindowStyle(wxALIGN_RIGHT | wxALIGN_CENTER_VERTICAL | wxEXPAND);
-    currentTextControl->SetFont(wxFont(16, wxFONTFAMILY_DEFAULT, wxFONTSTYLE_NORMAL, wxFONTWEIGHT_BOLD));
+    auto *lastTextControl = new TextControl(textPanel, wxEmptyString);
+    lastTextControl->Bind(wxEVT_CONTEXT_MENU, [](wxContextMenuEvent &event) {});
+    lastTextControl->Bind(wxEVT_SET_FOCUS, [](wxFocusEvent &event) {});
+
+    auto *currentTextControl = new TextControl(textPanel, "0");
     currentTextControl->Bind(wxEVT_CONTEXT_MENU, [](wxContextMenuEvent &event) {});
 
     const int TEXT_CONTAINER_VERTICAL_MARGIN = FromDIP(5);
+    textInnerContainer->AddSpacer(TEXT_CONTAINER_VERTICAL_MARGIN);
+    textInnerContainer->Add(lastTextControl, 1, wxEXPAND, 0);
     textInnerContainer->AddSpacer(TEXT_CONTAINER_VERTICAL_MARGIN);
     textInnerContainer->Add(currentTextControl, 1, wxEXPAND, 0);
     textInnerContainer->AddSpacer(TEXT_CONTAINER_VERTICAL_MARGIN);
@@ -64,14 +70,15 @@ CalculatorFrame::CalculatorFrame(const wxString &title, const wxPoint &pos, cons
     auto buttonInnerContainer = new wxBoxSizer(wxVERTICAL);
 
     auto operation = OperationType::NONE;
-    auto buttonGrid = new ButtonGrid(this, currentTextControl, &operation);
+    auto buttonGrid = new ButtonGrid(this, lastTextControl, currentTextControl, &operation);
 
-    const int BUTTON_CONTAINER_VERTICAL_MARGIN = FromDIP(5);
-    buttonInnerContainer->AddSpacer(BUTTON_CONTAINER_VERTICAL_MARGIN);
+    const int BUTTON_CONTAINER_TOP_VERTICAL_MARGIN = FromDIP(5);
+    const int BUTTON_CONTAINER_BOTTOM_VERTICAL_MARGIN = FromDIP(10);
+    buttonInnerContainer->AddSpacer(BUTTON_CONTAINER_TOP_VERTICAL_MARGIN);
     buttonInnerContainer->Add(buttonGrid, 1, wxEXPAND, 0);
-    buttonInnerContainer->AddSpacer(BUTTON_CONTAINER_VERTICAL_MARGIN);
+    buttonInnerContainer->AddSpacer(BUTTON_CONTAINER_BOTTOM_VERTICAL_MARGIN);
 
-    const int BUTTON_CONTAINER_HORIZONTAL_MARGIN = FromDIP(5);
+    const int BUTTON_CONTAINER_HORIZONTAL_MARGIN = FromDIP(10);
     buttonContainer->AddSpacer(BUTTON_CONTAINER_HORIZONTAL_MARGIN);
     buttonContainer->Add(buttonInnerContainer, 1, wxEXPAND, 0);
     buttonContainer->AddSpacer(BUTTON_CONTAINER_HORIZONTAL_MARGIN);
@@ -82,7 +89,7 @@ CalculatorFrame::CalculatorFrame(const wxString &title, const wxPoint &pos, cons
     mainSizer->Add(textPanel, 0, wxEXPAND, MARGIN);
     mainSizer->Add(buttonContainer, 1, wxEXPAND, MARGIN);
     SetSizer(mainSizer);
-    SetMinSize(wxSize(210, 270));
+    SetMinSize(wxSize(270, 360));
 
     Center();
 }

@@ -15,11 +15,13 @@ const enum OperationType {
 class ButtonGrid : public wxGridSizer
 {
 public:
-    ButtonGrid(wxWindow *parent, wxTextCtrl *textControl, OperationType *operationType);
+    ButtonGrid(wxWindow *parent, wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl, OperationType *operationType);
 
 private:
     void CreateButton(wxGridSizer *container, CalculatorButton *button);
 
-    void AppendDigit(wxTextCtrl *textControl, std::string buttonValue);
-    void DeleteDigit(wxTextCtrl *textControl);
+    void HandleDigit(wxTextCtrl *currentTextControl, std::string buttonValue);
+    void HandleDelete(wxTextCtrl *currentTextControl);
+    void HandleClear(wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl, OperationType *operationType);
+    void HandleAction(wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl, OperationType *operationType, OperationType type);
 };
