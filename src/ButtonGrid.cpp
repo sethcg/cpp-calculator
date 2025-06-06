@@ -1,11 +1,13 @@
 #define _CRT_SECURE_NO_WARNINGS
 #include <vector>
+#include <format>
 #include <wx/wx.h>
+#include <ctype.h>
 #include <colors/Colors.h>
 #include <CalculatorButton.h>
 #include <ButtonGrid.h>
 
-ButtonGrid::ButtonGrid(wxWindow *parent, wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl, OperationType *operationType) : wxGridSizer(BUTTON_CONTAINER_ROWS, BUTTON_CONTAINER_COLS, 0, 0)
+ButtonGrid::ButtonGrid(wxWindow *parent, wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl) : wxGridSizer(BUTTON_CONTAINER_ROWS, BUTTON_CONTAINER_COLS, 0, 0)
 {
     const int BUTTON_CONTAINER_MARGIN = parent->FromDIP(8);
     this->SetHGap(BUTTON_CONTAINER_MARGIN);
@@ -14,8 +16,8 @@ ButtonGrid::ButtonGrid(wxWindow *parent, wxTextCtrl *lastTextControl, wxTextCtrl
     std::vector<CalculatorButton *>
         buttons({
             // AC, CLEAR (ALL)
-            new CalculatorButton([this, operationType, lastTextControl, currentTextControl]() -> void
-                                 { ButtonGrid::HandleClear(lastTextControl, currentTextControl, operationType); }, parent, currentTextControl, BUTTON_STRING_ALL_CLEAR, COLOR_RED),
+            new CalculatorButton([this, lastTextControl, currentTextControl]() -> void
+                                 { ButtonGrid::HandleClear(lastTextControl, currentTextControl); }, parent, currentTextControl, BUTTON_STRING_ALL_CLEAR, COLOR_RED),
             // DEL, DELETE DIGIT
             new CalculatorButton([this, currentTextControl]() -> void
                                  { ButtonGrid::HandleDelete(currentTextControl); }, parent, currentTextControl, BUTTON_STRING_DELETE),
@@ -26,8 +28,8 @@ ButtonGrid::ButtonGrid(wxWindow *parent, wxTextCtrl *lastTextControl, wxTextCtrl
                                  },
                                  parent, currentTextControl, BUTTON_STRING_PERCENT),
             // MULTIPLY
-            new CalculatorButton([this, operationType, lastTextControl, currentTextControl]() -> void
-                                 { ButtonGrid::HandleAction(lastTextControl, currentTextControl, operationType, OperationType::MULTIPLY); }, parent, currentTextControl, BUTTON_STRING_MULTIPLY),
+            new CalculatorButton([this, lastTextControl, currentTextControl]() -> void
+                                 { ButtonGrid::HandleAction(lastTextControl, currentTextControl, OperationType::MULTIPLY); }, parent, currentTextControl, BUTTON_STRING_MULTIPLY),
             // 7
             new CalculatorButton([this, currentTextControl]() -> void
                                  { ButtonGrid::HandleDigit(currentTextControl, BUTTON_STRING_SEVEN_DIGIT); }, parent, currentTextControl, BUTTON_STRING_SEVEN_DIGIT),
@@ -38,8 +40,8 @@ ButtonGrid::ButtonGrid(wxWindow *parent, wxTextCtrl *lastTextControl, wxTextCtrl
             new CalculatorButton([this, currentTextControl]() -> void
                                  { ButtonGrid::HandleDigit(currentTextControl, BUTTON_STRING_NINE_DIGIT); }, parent, currentTextControl, BUTTON_STRING_NINE_DIGIT),
             // DIVIDE
-            new CalculatorButton([this, operationType, lastTextControl, currentTextControl]() -> void
-                                 { ButtonGrid::HandleAction(lastTextControl, currentTextControl, operationType, OperationType::DIVIDE); }, parent, currentTextControl, BUTTON_STRING_DIVIDE),
+            new CalculatorButton([this, lastTextControl, currentTextControl]() -> void
+                                 { ButtonGrid::HandleAction(lastTextControl, currentTextControl, OperationType::DIVIDE); }, parent, currentTextControl, BUTTON_STRING_DIVIDE),
             // 4
             new CalculatorButton([this, currentTextControl]() -> void
                                  { ButtonGrid::HandleDigit(currentTextControl, BUTTON_STRING_FOUR_DIGIT); }, parent, currentTextControl, BUTTON_STRING_FOUR_DIGIT),
@@ -50,8 +52,8 @@ ButtonGrid::ButtonGrid(wxWindow *parent, wxTextCtrl *lastTextControl, wxTextCtrl
             new CalculatorButton([this, currentTextControl]() -> void
                                  { ButtonGrid::HandleDigit(currentTextControl, BUTTON_STRING_SIX_DIGIT); }, parent, currentTextControl, BUTTON_STRING_SIX_DIGIT),
             // SUBTRACT
-            new CalculatorButton([this, operationType, lastTextControl, currentTextControl]() -> void
-                                 { ButtonGrid::HandleAction(lastTextControl, currentTextControl, operationType, OperationType::SUBTRACT); }, parent, currentTextControl, BUTTON_STRING_SUBTRACT),
+            new CalculatorButton([this, lastTextControl, currentTextControl]() -> void
+                                 { ButtonGrid::HandleAction(lastTextControl, currentTextControl, OperationType::SUBTRACT); }, parent, currentTextControl, BUTTON_STRING_SUBTRACT),
             // 1
             new CalculatorButton([this, currentTextControl]() -> void
                                  { ButtonGrid::HandleDigit(currentTextControl, BUTTON_STRING_ONE_DIGIT); }, parent, currentTextControl, BUTTON_STRING_ONE_DIGIT),
@@ -62,8 +64,8 @@ ButtonGrid::ButtonGrid(wxWindow *parent, wxTextCtrl *lastTextControl, wxTextCtrl
             new CalculatorButton([this, currentTextControl]() -> void
                                  { ButtonGrid::HandleDigit(currentTextControl, BUTTON_STRING_THREE_DIGIT); }, parent, currentTextControl, BUTTON_STRING_THREE_DIGIT),
             // ADD
-            new CalculatorButton([this, operationType, lastTextControl, currentTextControl]() -> void
-                                 { ButtonGrid::HandleAction(lastTextControl, currentTextControl, operationType, OperationType::ADD); }, parent, currentTextControl, BUTTON_STRING_ADD),
+            new CalculatorButton([this, lastTextControl, currentTextControl]() -> void
+                                 { ButtonGrid::HandleAction(lastTextControl, currentTextControl, OperationType::ADD); }, parent, currentTextControl, BUTTON_STRING_ADD),
             // NEGATE (POSITIVE/NEGATIVE)
             new CalculatorButton([this, currentTextControl]() -> void
                                  {
@@ -75,18 +77,10 @@ ButtonGrid::ButtonGrid(wxWindow *parent, wxTextCtrl *lastTextControl, wxTextCtrl
                                  { ButtonGrid::HandleDigit(currentTextControl, BUTTON_STRING_ZERO_DIGIT); }, parent, currentTextControl, BUTTON_STRING_ZERO_DIGIT),
             // DECIMAL
             new CalculatorButton([this, currentTextControl]() -> void
-                                 { ButtonGrid::HandleDigit(currentTextControl, BUTTON_STRING_DECIMAL); }, parent, currentTextControl, BUTTON_STRING_DECIMAL),
+                                 { ButtonGrid::HandleDecimal(currentTextControl, BUTTON_STRING_DECIMAL); }, parent, currentTextControl, BUTTON_STRING_DECIMAL),
             // EQUAL
-            new CalculatorButton([operationType, lastTextControl, currentTextControl]() -> void
-                                 {
-                                     // TODO: IMPLEMENT
-                                     *operationType = OperationType::NONE;
-                                     lastTextControl->SetValue(wxEmptyString);
-                                     currentTextControl->SetValue("0");
-                                     // const std::string stringValue = currentTextControl->GetValue().wxString::ToStdString();
-                                     // const double currentValue = std::stod(stringValue);
-                                 },
-                                 parent, currentTextControl, BUTTON_STRING_EQUAL, COLOR_ORANGE, *wxBLACK),
+            new CalculatorButton([this, lastTextControl, currentTextControl]() -> void
+                                 { ButtonGrid::HandleEvaluate(lastTextControl, currentTextControl); }, parent, currentTextControl, BUTTON_STRING_EQUAL, COLOR_ORANGE, *wxBLACK),
         });
 
     // ADD BUTTONS TO CONTAINER
@@ -104,9 +98,27 @@ void ButtonGrid::HandleDigit(wxTextCtrl *currentTextControl, std::string buttonV
     std::string currentValue = currentTextControl->GetValue().wxString::ToStdString();
     if (currentValue.length() < 9)
     {
-        // REMOVE THE DEFAULT "0" VALUE
-        if (currentValue == "0")
+        // REMOVE THE DEFAULT "0" VALUE OR "Error" MESSAGE
+        if (currentValue == "0" || currentValue == "Error")
+        {
             currentValue = "";
+        }
+
+        const std::string textValue = currentValue.append(buttonValue);
+        currentTextControl->SetValue(textValue);
+    }
+}
+
+void ButtonGrid::HandleDecimal(wxTextCtrl *currentTextControl, std::string buttonValue)
+{
+    std::string currentValue = currentTextControl->GetValue().wxString::ToStdString();
+    if (currentValue.length() < 9 || currentValue.find('.') != currentValue.npos)
+    {
+        // REMOVE THE DEFAULT "0" VALUE OR "Error" MESSAGE
+        if (currentValue == "0" || currentValue == "Error")
+        {
+            currentValue = "";
+        }
 
         const std::string textValue = currentValue.append(buttonValue);
         currentTextControl->SetValue(textValue);
@@ -131,14 +143,14 @@ void ButtonGrid::HandleDelete(wxTextCtrl *currentTextControl)
     }
 }
 
-void ButtonGrid::HandleClear(wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl, OperationType *operationType)
+void ButtonGrid::HandleClear(wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl)
 {
-    *operationType = OperationType::NONE;
+    operationType = OperationType::NONE;
     lastTextControl->SetValue(wxEmptyString);
     currentTextControl->SetValue("0");
 }
 
-void ButtonGrid::HandleAction(wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl, OperationType *operationType, OperationType type)
+void ButtonGrid::HandleAction(wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl, OperationType type)
 {
     if (lastTextControl->GetValue().length() > 0)
         return;
@@ -148,22 +160,92 @@ void ButtonGrid::HandleAction(wxTextCtrl *lastTextControl, wxTextCtrl *currentTe
     switch (type)
     {
     case OperationType::ADD:
+        operationType = OperationType::ADD;
         lastValue.insert(0, BUTTON_STRING_ADD);
         break;
     case OperationType::SUBTRACT:
+        operationType = OperationType::SUBTRACT;
         lastValue.insert(0, BUTTON_STRING_SUBTRACT);
         break;
     case OperationType::MULTIPLY:
+        operationType = OperationType::MULTIPLY;
         lastValue.insert(0, BUTTON_STRING_MULTIPLY);
         break;
     case OperationType::DIVIDE:
+        operationType = OperationType::DIVIDE;
         lastValue.insert(0, BUTTON_STRING_DIVIDE);
         break;
     default:
         return;
     }
 
-    *operationType = type;
     lastTextControl->SetValue(currentValue.insert(0, lastValue));
     currentTextControl->SetValue("0");
+}
+
+void ButtonGrid::HandleEvaluate(wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl)
+{
+    if (lastTextControl->GetValue().length() <= 0)
+        return;
+
+    try
+    {
+        std::string stringCurrentValue = currentTextControl->GetValue().wxString::ToStdString();
+
+        // REMOVE NON-NUMERIC CHARACTERS FROM STRING Remove non-numeric chars from text
+        std::string stringLastValue = lastTextControl->GetValue().wxString::ToStdString();
+        std::string temp;
+        for (char &character : stringLastValue)
+        {
+            std::string allowed = "0123456789";
+            if (allowed.find(character) != std::string::npos)
+            {
+                temp.push_back(character);
+            }
+        }
+        stringLastValue = temp;
+
+        double result = 0;
+        const double currentValue = std::stod(stringCurrentValue);
+        const double lastValue = std::stod(stringLastValue);
+
+        switch (operationType)
+        {
+        case OperationType::ADD:
+            result = lastValue + currentValue;
+            break;
+        case OperationType::SUBTRACT:
+            result = lastValue - currentValue;
+            break;
+        case OperationType::MULTIPLY:
+            result = lastValue * currentValue;
+            break;
+        case OperationType::DIVIDE:
+            result = lastValue / currentValue;
+            break;
+        default:
+            return;
+        }
+
+        // RESET THE CONTROLS
+        operationType = OperationType::NONE;
+        lastTextControl->SetValue(wxEmptyString);
+
+        // ROUND RESULT TO TWO DECIMAL PLACES,
+        // OR REMOVE ".00" IF IT ROUNDS TO A PRECISE INTEGER
+        std::string stringResult = std::format("{:.2f}", result);
+        if (stringResult.length() > 3 && stringResult.substr(stringResult.size() - 3) == ".00")
+        {
+            currentTextControl->SetValue(stringResult.substr(0, stringResult.size() - 3));
+        }
+        else
+        {
+            currentTextControl->SetValue(stringResult);
+        }
+    }
+    catch (int exception)
+    {
+        (void)exception;
+        currentTextControl->SetValue("Error");
+    }
 }

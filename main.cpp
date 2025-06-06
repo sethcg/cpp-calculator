@@ -70,7 +70,7 @@ CalculatorFrame::CalculatorFrame(const wxString &title, const wxPoint &pos, cons
     auto buttonInnerContainer = new wxBoxSizer(wxVERTICAL);
 
     auto operation = OperationType::NONE;
-    auto buttonGrid = new ButtonGrid(this, lastTextControl, currentTextControl, &operation);
+    auto buttonGrid = new ButtonGrid(this, lastTextControl, currentTextControl);
 
     const int BUTTON_CONTAINER_TOP_VERTICAL_MARGIN = FromDIP(5);
     const int BUTTON_CONTAINER_BOTTOM_VERTICAL_MARGIN = FromDIP(10);
