@@ -152,34 +152,40 @@ void ButtonGrid::HandleClear(wxTextCtrl *lastTextControl, wxTextCtrl *currentTex
 
 void ButtonGrid::HandleAction(wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl, OperationType type)
 {
+    if (operationType == OperationType::EQUAL)
+        lastTextControl->SetValue(wxEmptyString);
+
     if (lastTextControl->GetValue().length() > 0)
         return;
 
     std::string currentValue = currentTextControl->GetValue().wxString::ToStdString();
-    std::string lastValue = " ";
     switch (type)
     {
     case OperationType::ADD:
         operationType = OperationType::ADD;
-        lastValue.insert(0, BUTTON_STRING_ADD);
+        currentValue.push_back(' ');
+        currentValue.push_back(BUTTON_STRING_ADD[0]);
         break;
     case OperationType::SUBTRACT:
         operationType = OperationType::SUBTRACT;
-        lastValue.insert(0, BUTTON_STRING_SUBTRACT);
+        currentValue.push_back(' ');
+        currentValue.push_back(BUTTON_STRING_SUBTRACT[0]);
         break;
     case OperationType::MULTIPLY:
         operationType = OperationType::MULTIPLY;
-        lastValue.insert(0, BUTTON_STRING_MULTIPLY);
+        currentValue.push_back(' ');
+        currentValue.push_back(BUTTON_STRING_MULTIPLY[0]);
         break;
     case OperationType::DIVIDE:
         operationType = OperationType::DIVIDE;
-        lastValue.insert(0, BUTTON_STRING_DIVIDE);
+        currentValue.push_back(' ');
+        currentValue.push_back(BUTTON_STRING_DIVIDE[0]);
         break;
     default:
         return;
     }
 
-    lastTextControl->SetValue(currentValue.insert(0, lastValue));
+    lastTextControl->SetValue(currentValue);
     currentTextControl->SetValue("0");
 }
 
@@ -190,46 +196,51 @@ void ButtonGrid::HandleEvaluate(wxTextCtrl *lastTextControl, wxTextCtrl *current
 
     try
     {
-        std::string stringCurrentValue = currentTextControl->GetValue().wxString::ToStdString();
+        std::string currentValue = currentTextControl->GetValue().wxString::ToStdString();
+        std::string lastValue = lastTextControl->GetValue().wxString::ToStdString();
 
-        // REMOVE NON-NUMERIC CHARACTERS FROM STRING Remove non-numeric chars from text
-        std::string stringLastValue = lastTextControl->GetValue().wxString::ToStdString();
-        std::string temp;
-        for (char &character : stringLastValue)
+        // SET OPERATION HISTORY
+        std::string stringOperation = lastValue;
+        stringOperation.push_back(' ');
+        stringOperation.append(currentValue);
+        stringOperation.push_back(' ');
+        stringOperation.push_back(BUTTON_STRING_EQUAL[0]);
+        lastTextControl->SetValue(stringOperation);
+
+        // REMOVE NON-NUMERIC CHARACTERS FROM STRING
+        std::string temp = currentValue;
+        currentValue = "";
+        for (char &character : temp)
         {
             std::string allowed = "0123456789";
             if (allowed.find(character) != std::string::npos)
-            {
-                temp.push_back(character);
-            }
+                currentValue.push_back(character);
         }
-        stringLastValue = temp;
 
         double result = 0;
-        const double currentValue = std::stod(stringCurrentValue);
-        const double lastValue = std::stod(stringLastValue);
+        const double currentValueDouble = std::stod(currentValue);
+        const double lastValueDouble = std::stod(lastValue);
 
         switch (operationType)
         {
         case OperationType::ADD:
-            result = lastValue + currentValue;
+            result = lastValueDouble + currentValueDouble;
             break;
         case OperationType::SUBTRACT:
-            result = lastValue - currentValue;
+            result = lastValueDouble - currentValueDouble;
             break;
         case OperationType::MULTIPLY:
-            result = lastValue * currentValue;
+            result = lastValueDouble * currentValueDouble;
             break;
         case OperationType::DIVIDE:
-            result = lastValue / currentValue;
+            result = lastValueDouble / currentValueDouble;
             break;
         default:
             return;
         }
 
         // RESET THE CONTROLS
-        operationType = OperationType::NONE;
-        lastTextControl->SetValue(wxEmptyString);
+        operationType = OperationType::EQUAL;
 
         // ROUND RESULT TO TWO DECIMAL PLACES,
         // OR REMOVE ".00" IF IT ROUNDS TO A PRECISE INTEGER

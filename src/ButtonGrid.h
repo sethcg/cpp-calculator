@@ -9,7 +9,8 @@ const enum OperationType {
     MULTIPLY,
     DIVIDE,
     SUBTRACT,
-    ADD
+    ADD,
+    EQUAL
 };
 
 class ButtonGrid : public wxGridSizer
