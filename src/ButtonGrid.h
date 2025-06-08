@@ -10,6 +10,7 @@ const enum OperationType {
     DIVIDE,
     SUBTRACT,
     ADD,
+    PERCENT,
     EQUAL
 };
 

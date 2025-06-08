@@ -22,11 +22,8 @@ ButtonGrid::ButtonGrid(wxWindow *parent, wxTextCtrl *lastTextControl, wxTextCtrl
             new CalculatorButton([this, currentTextControl]() -> void
                                  { ButtonGrid::HandleDelete(currentTextControl); }, parent, currentTextControl, BUTTON_STRING_DELETE),
             // %, PERCENTAGE
-            new CalculatorButton([]() -> void
-                                 {
-                                     // TODO: IMPLEMENT
-                                 },
-                                 parent, currentTextControl, BUTTON_STRING_PERCENT),
+            new CalculatorButton([this, lastTextControl, currentTextControl]() -> void
+                                 { ButtonGrid::HandleAction(lastTextControl, currentTextControl, OperationType::PERCENT); }, parent, currentTextControl, BUTTON_STRING_PERCENT),
             // MULTIPLY
             new CalculatorButton([this, lastTextControl, currentTextControl]() -> void
                                  { ButtonGrid::HandleAction(lastTextControl, currentTextControl, OperationType::MULTIPLY); }, parent, currentTextControl, BUTTON_STRING_MULTIPLY),
@@ -159,34 +156,49 @@ void ButtonGrid::HandleAction(wxTextCtrl *lastTextControl, wxTextCtrl *currentTe
         return;
 
     std::string currentValue = currentTextControl->GetValue().wxString::ToStdString();
+    double currentValueDouble, result;
+    std::string stringResult;
     switch (type)
     {
     case OperationType::ADD:
         operationType = OperationType::ADD;
         currentValue.push_back(' ');
         currentValue.push_back(BUTTON_STRING_ADD[0]);
+        lastTextControl->SetValue(currentValue);
+        currentTextControl->SetValue("0");
         break;
     case OperationType::SUBTRACT:
         operationType = OperationType::SUBTRACT;
         currentValue.push_back(' ');
         currentValue.push_back(BUTTON_STRING_SUBTRACT[0]);
+        lastTextControl->SetValue(currentValue);
+        currentTextControl->SetValue("0");
         break;
     case OperationType::MULTIPLY:
         operationType = OperationType::MULTIPLY;
         currentValue.push_back(' ');
         currentValue.push_back(BUTTON_STRING_MULTIPLY[0]);
+        lastTextControl->SetValue(currentValue);
+        currentTextControl->SetValue("0");
         break;
     case OperationType::DIVIDE:
         operationType = OperationType::DIVIDE;
         currentValue.push_back(' ');
         currentValue.push_back(BUTTON_STRING_DIVIDE[0]);
+        lastTextControl->SetValue(currentValue);
+        currentTextControl->SetValue("0");
+        break;
+    case OperationType::PERCENT:
+        operationType = OperationType::EQUAL;
+        currentValueDouble = std::stod(currentValue);
+        result = currentValueDouble / 100;
+        stringResult = std::format("{:g}", result);
+        lastTextControl->SetValue(stringResult);
+        currentTextControl->SetValue(stringResult);
         break;
     default:
         return;
     }
-
-    lastTextControl->SetValue(currentValue);
-    currentTextControl->SetValue("0");
 }
 
 void ButtonGrid::HandleEvaluate(wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl)
@@ -221,7 +233,7 @@ void ButtonGrid::HandleEvaluate(wxTextCtrl *lastTextControl, wxTextCtrl *current
         const double currentValueDouble = std::stod(currentValue);
         const double lastValueDouble = std::stod(lastValue);
 
-        switch (operationType)
+        switch (ButtonGrid::operationType)
         {
         case OperationType::ADD:
             result = lastValueDouble + currentValueDouble;
@@ -240,19 +252,11 @@ void ButtonGrid::HandleEvaluate(wxTextCtrl *lastTextControl, wxTextCtrl *current
         }
 
         // RESET THE CONTROLS
-        operationType = OperationType::EQUAL;
+        ButtonGrid::operationType = OperationType::EQUAL;
 
-        // ROUND RESULT TO TWO DECIMAL PLACES,
-        // OR REMOVE ".00" IF IT ROUNDS TO A PRECISE INTEGER
-        std::string stringResult = std::format("{:.2f}", result);
-        if (stringResult.length() > 3 && stringResult.substr(stringResult.size() - 3) == ".00")
-        {
-            currentTextControl->SetValue(stringResult.substr(0, stringResult.size() - 3));
-        }
-        else
-        {
-            currentTextControl->SetValue(stringResult);
-        }
+        // ROUND RESULT BY DEFAULT (REMOVE TRAILING ZEROS)
+        std::string stringResult = std::format("{:g}", result);
+        currentTextControl->SetValue(stringResult);
     }
     catch (int exception)
     {
