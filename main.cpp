@@ -23,13 +23,11 @@ bool MyApp::OnInit()
 {
     MyApp::SetAppearance(Appearance::Dark);
 
-    CalculatorFrame *frame = new CalculatorFrame(wxString(), wxDefaultPosition, wxSize(270, 360));
+    CalculatorFrame *frame = new CalculatorFrame(wxEmptyString, wxDefaultPosition, wxSize(270, 360));
     frame->SetBackgroundColour(COLOR_FRAME_BACKGROUND);
     frame->SetIcon(wxIcon("assets\\icon.ico", wxBITMAP_TYPE_ICO));
     frame->Bind(wxEVT_CONTEXT_MENU, [](wxContextMenuEvent &event) {});
-    frame->Bind(wxEVT_MENU, [](wxCommandEvent &event) {});
-    frame->SetMenuBar(NULL);
-    frame->Show(true);
+    frame->Show();
 
     return true;
 }
@@ -68,8 +66,6 @@ CalculatorFrame::CalculatorFrame(const wxString &title, const wxPoint &pos, cons
     // INITIALIZE CALCULATOR BUTTONS
     auto buttonContainer = new wxBoxSizer(wxHORIZONTAL);
     auto buttonInnerContainer = new wxBoxSizer(wxVERTICAL);
-
-    auto operation = OperationType::NONE;
     auto buttonGrid = new ButtonGrid(this, lastTextControl, currentTextControl);
 
     const int BUTTON_CONTAINER_TOP_VERTICAL_MARGIN = FromDIP(5);
@@ -89,7 +85,7 @@ CalculatorFrame::CalculatorFrame(const wxString &title, const wxPoint &pos, cons
     mainSizer->Add(textPanel, 0, wxEXPAND, MARGIN);
     mainSizer->Add(buttonContainer, 1, wxEXPAND, MARGIN);
     SetSizer(mainSizer);
-    SetMinSize(wxSize(270, 360));
+    SetMinSize(size);
 
     Center();
 }

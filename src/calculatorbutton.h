@@ -1,5 +1,6 @@
 #pragma once
 #include <wx/wx.h>
+#include <colors/Colors.h>
 
 const inline std::string BUTTON_STRING_ZERO_DIGIT = "\u0030";         // STRING VALUE: "0"
 const inline std::string BUTTON_STRING_ONE_DIGIT = "\u0031";          // STRING VALUE: "1"
@@ -26,7 +27,5 @@ const inline std::string BUTTON_STRING_NEGATE = "\u00B1";   // STRING VALUE: "±
 class CalculatorButton : public wxButton
 {
 public:
-    CalculatorButton(std::function<void()> onClick, wxWindow *parent, wxTextCtrl *textControl, const wxString &label);
-    CalculatorButton(std::function<void()> onClick, wxWindow *parent, wxTextCtrl *textControl, const wxString &label, const wxColor &backgroundColor);
-    CalculatorButton(std::function<void()> onClick, wxWindow *parent, wxTextCtrl *textControl, const wxString &label, const wxColor &backgroundColor, const wxColor &textColor);
+    CalculatorButton(std::function<void()> onClick, wxWindow *parent, wxTextCtrl *textControl, const wxString &label, const wxColor &backgroundColor = COLOR_GRAY, const wxColor &textColor = *wxWHITE);
 };
