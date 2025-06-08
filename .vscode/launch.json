@@ -3,7 +3,7 @@
     "configurations": [
         {
             "cwd": "${workspaceFolder}",
-            "name": "(msvc) Launch",
+            "name": "open cpp-calculator",
             "type": "cppvsdbg",
             "request": "launch",
             "program": "${workspaceFolder}\\build\\Debug\\main.exe",
