@@ -24,7 +24,7 @@ bool MyApp::OnInit()
     MyApp::SetAppearance(Appearance::Dark);
 
     CalculatorFrame *frame = new CalculatorFrame(wxString(), wxDefaultPosition, wxSize(270, 360));
-    frame->SetBackgroundColour(wxColour(10, 10, 10, wxALPHA_OPAQUE));
+    frame->SetBackgroundColour(COLOR_FRAME_BACKGROUND);
     frame->SetIcon(wxIcon("assets\\icon.ico", wxBITMAP_TYPE_ICO));
     frame->Bind(wxEVT_CONTEXT_MENU, [](wxContextMenuEvent &event) {});
     frame->Bind(wxEVT_MENU, [](wxCommandEvent &event) {});
@@ -39,7 +39,7 @@ CalculatorFrame::CalculatorFrame(const wxString &title, const wxPoint &pos, cons
 {
     // INITIALIZE TEXT DISPLAY
     auto *textPanel = new wxPanel(this, wxID_ANY, wxDefaultPosition, wxDefaultSize, 0);
-    textPanel->SetBackgroundColour(wxColour(20, 20, 20, wxALPHA_OPAQUE));
+    textPanel->SetBackgroundColour(COLOR_PANEL_BACKGROUND);
 
     auto textContainer = new wxBoxSizer(wxHORIZONTAL);
     auto textInnerContainer = new wxBoxSizer(wxVERTICAL);
