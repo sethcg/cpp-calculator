@@ -2,7 +2,8 @@
 #include <colors/Colors.h>
 #include <TextControl.h>
 
-TextControl::TextControl(wxWindow *parent, wxString defaultValue) : wxTextCtrl()
+TextControl::TextControl(wxWindow *parent, wxString defaultValue)
+    : wxTextCtrl()
 {
     this->SetBackgroundColour(COLOR_APPLICATION_BACKGROUND);
     this->Create(parent, wxID_ANY, defaultValue, wxDefaultPosition, wxDefaultSize, wxTE_READONLY | wxSIMPLE_BORDER);

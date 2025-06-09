@@ -2,7 +2,8 @@
 #include <colors/Colors.h>
 #include <CalculatorButton.h>
 
-CalculatorButton::CalculatorButton(std::function<void()> onClick, wxWindow *parent, wxTextCtrl *textControl, const wxString &label, const wxColor &backgroundColor, const wxColor &textColor)
+CalculatorButton::CalculatorButton(std::function<void()> onClick, wxWindow *parent, wxTextCtrl *textControl, const wxString &label,
+                                   const wxColor &backgroundColor, const wxColor &textColor)
     : wxButton(parent, wxID_ANY, label, wxDefaultPosition, wxDefaultSize, wxEXPAND)
 {
     this->SetBackgroundColour(backgroundColor);

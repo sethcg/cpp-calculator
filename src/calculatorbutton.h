@@ -27,5 +27,6 @@ const inline std::string BUTTON_STRING_NEGATE = "\u00B1";   // STRING VALUE: "±
 class CalculatorButton : public wxButton
 {
 public:
-    CalculatorButton(std::function<void()> onClick, wxWindow *parent, wxTextCtrl *textControl, const wxString &label, const wxColor &backgroundColor = COLOR_GRAY, const wxColor &textColor = *wxWHITE);
+    CalculatorButton(std::function<void()> onClick, wxWindow *parent, wxTextCtrl *textControl, const wxString &label,
+                     const wxColor &backgroundColor = COLOR_GRAY, const wxColor &textColor = *wxWHITE);
 };

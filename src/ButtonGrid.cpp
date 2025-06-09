@@ -7,7 +7,8 @@
 #include <CalculatorButton.h>
 #include <ButtonGrid.h>
 
-ButtonGrid::ButtonGrid(wxWindow *parent, wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl) : wxGridSizer(BUTTON_CONTAINER_ROWS, BUTTON_CONTAINER_COLS, 0, 0)
+ButtonGrid::ButtonGrid(wxWindow *parent, wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl)
+    : wxGridSizer(BUTTON_CONTAINER_ROWS, BUTTON_CONTAINER_COLS, 0, 0)
 {
     const int BUTTON_CONTAINER_MARGIN = parent->FromDIP(8);
     this->SetHGap(BUTTON_CONTAINER_MARGIN);
