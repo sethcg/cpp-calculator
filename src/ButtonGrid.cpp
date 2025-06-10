@@ -234,6 +234,7 @@ void ButtonGrid::HandleEvaluate(wxTextCtrl *lastTextControl, wxTextCtrl *current
         const double currentValueDouble = std::stod(currentValue);
         const double lastValueDouble = std::stod(lastValue);
 
+        std::string equalResult;
         switch (ButtonGrid::operationType)
         {
         case OperationType::ADD:
@@ -248,6 +249,11 @@ void ButtonGrid::HandleEvaluate(wxTextCtrl *lastTextControl, wxTextCtrl *current
         case OperationType::DIVIDE:
             result = lastValueDouble / currentValueDouble;
             break;
+        case OperationType::EQUAL:
+            equalResult = std::format("{:g}", currentValueDouble);
+            lastTextControl->SetValue(equalResult);
+            currentTextControl->SetValue(equalResult);
+            return;
         default:
             return;
         }
