@@ -98,9 +98,7 @@ void ButtonGrid::HandleDigit(wxTextCtrl *currentTextControl, std::string buttonV
     {
         // REMOVE THE DEFAULT "0" VALUE OR "Error" MESSAGE
         if (currentValue == "0" || currentValue == "Error")
-        {
             currentValue = "";
-        }
 
         const std::string textValue = currentValue.append(buttonValue);
         currentTextControl->SetValue(textValue);
@@ -110,13 +108,11 @@ void ButtonGrid::HandleDigit(wxTextCtrl *currentTextControl, std::string buttonV
 void ButtonGrid::HandleDecimal(wxTextCtrl *currentTextControl, std::string buttonValue)
 {
     std::string currentValue = currentTextControl->GetValue().wxString::ToStdString();
-    if (currentValue.length() < 9 || currentValue.find('.') != currentValue.npos)
+    if (currentValue.length() < 9 && currentValue.find(buttonValue) == std::string::npos)
     {
         // REMOVE THE DEFAULT "0" VALUE OR "Error" MESSAGE
         if (currentValue == "0" || currentValue == "Error")
-        {
             currentValue = "";
-        }
 
         const std::string textValue = currentValue.append(buttonValue);
         currentTextControl->SetValue(textValue);
@@ -157,43 +153,49 @@ void ButtonGrid::HandleAction(wxTextCtrl *lastTextControl, wxTextCtrl *currentTe
         return;
 
     std::string currentValue = currentTextControl->GetValue().wxString::ToStdString();
-    double currentValueDouble, result;
-    std::string stringResult;
+
+    // REMOVE UNNECESSARY DECIMAL
+    if (currentValue.back() == '.')
+        currentValue = currentValue.substr(0, currentValue.size() - 1);
+
+    double doubleResult;
+    double currentValueDouble = std::stod(currentValue);
+    std::string stringResult = std::format("{:g}", currentValueDouble);
     switch (type)
     {
     case OperationType::ADD:
         operationType = OperationType::ADD;
-        currentValue.push_back(' ');
-        currentValue.push_back(BUTTON_STRING_ADD[0]);
-        lastTextControl->SetValue(currentValue);
+        stringResult.push_back(' ');
+        stringResult.push_back(BUTTON_STRING_ADD[0]);
+        lastTextControl->SetValue(stringResult);
         currentTextControl->SetValue("0");
         break;
     case OperationType::SUBTRACT:
         operationType = OperationType::SUBTRACT;
-        currentValue.push_back(' ');
-        currentValue.push_back(BUTTON_STRING_SUBTRACT[0]);
-        lastTextControl->SetValue(currentValue);
+        stringResult.push_back(' ');
+        stringResult.push_back(BUTTON_STRING_SUBTRACT[0]);
+        lastTextControl->SetValue(stringResult);
         currentTextControl->SetValue("0");
         break;
     case OperationType::MULTIPLY:
         operationType = OperationType::MULTIPLY;
-        currentValue.push_back(' ');
-        currentValue.push_back(BUTTON_STRING_MULTIPLY[0]);
-        lastTextControl->SetValue(currentValue);
+        stringResult.push_back(' ');
+        stringResult.push_back(BUTTON_STRING_MULTIPLY[0]);
+        lastTextControl->SetValue(stringResult);
         currentTextControl->SetValue("0");
         break;
     case OperationType::DIVIDE:
         operationType = OperationType::DIVIDE;
-        currentValue.push_back(' ');
-        currentValue.push_back(BUTTON_STRING_DIVIDE[0]);
-        lastTextControl->SetValue(currentValue);
+        stringResult.push_back(' ');
+        stringResult.push_back(BUTTON_STRING_DIVIDE[0]);
+        lastTextControl->SetValue(stringResult);
         currentTextControl->SetValue("0");
         break;
     case OperationType::PERCENT:
         operationType = OperationType::EQUAL;
         currentValueDouble = std::stod(currentValue);
-        result = currentValueDouble / 100;
-        stringResult = std::format("{:g}", result);
+        doubleResult = currentValueDouble / 100;
+        stringResult = std::format("{:g}", doubleResult);
         lastTextControl->SetValue(stringResult);
         currentTextControl->SetValue(stringResult);
         break;
@@ -212,6 +214,10 @@ void ButtonGrid::HandleEvaluate(wxTextCtrl *lastTextControl, wxTextCtrl *current
         std::string currentValue = currentTextControl->GetValue().wxString::ToStdString();
         std::string lastValue = lastTextControl->GetValue().wxString::ToStdString();
 
+        // REMOVE UNNECESSARY DECIMAL
+        if (currentValue.back() == '.')
+            currentValue = currentValue.substr(0, currentValue.size() - 1);
+
         // SET OPERATION HISTORY
         std::string stringOperation = lastValue;
         stringOperation.push_back(' ');
@@ -225,7 +231,7 @@ void ButtonGrid::HandleEvaluate(wxTextCtrl *lastTextControl, wxTextCtrl *current
         currentValue = "";
         for (char &character : temp)
         {
-            std::string allowed = "0123456789";
+            std::string allowed = "0123456789.";
             if (allowed.find(character) != std::string::npos)
                 currentValue.push_back(character);
         }
