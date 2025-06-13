@@ -66,16 +66,13 @@ ButtonGrid::ButtonGrid(wxWindow *parent, wxTextCtrl *lastTextControl, wxTextCtrl
                                  { ButtonGrid::HandleAction(lastTextControl, currentTextControl, OperationType::ADD); }, parent, currentTextControl, BUTTON_STRING_ADD),
             // NEGATE (POSITIVE/NEGATIVE)
             new CalculatorButton([this, currentTextControl]() -> void
-                                 {
-                                     // TODO: IMPLEMENT
-                                 },
-                                 parent, currentTextControl, BUTTON_STRING_NEGATE),
+                                 { ButtonGrid::HandleNegate(currentTextControl); }, parent, currentTextControl, BUTTON_STRING_NEGATE),
             // 0
             new CalculatorButton([this, currentTextControl]() -> void
                                  { ButtonGrid::HandleDigit(currentTextControl, BUTTON_STRING_ZERO_DIGIT); }, parent, currentTextControl, BUTTON_STRING_ZERO_DIGIT),
             // DECIMAL
             new CalculatorButton([this, currentTextControl]() -> void
-                                 { ButtonGrid::HandleDecimal(currentTextControl, BUTTON_STRING_DECIMAL); }, parent, currentTextControl, BUTTON_STRING_DECIMAL),
+                                 { ButtonGrid::HandleDecimal(currentTextControl); }, parent, currentTextControl, BUTTON_STRING_DECIMAL),
             // EQUAL
             new CalculatorButton([this, lastTextControl, currentTextControl]() -> void
                                  { ButtonGrid::HandleEvaluate(lastTextControl, currentTextControl); }, parent, currentTextControl, BUTTON_STRING_EQUAL, COLOR_ORANGE, *wxBLACK),
@@ -105,17 +102,36 @@ void ButtonGrid::HandleDigit(wxTextCtrl *currentTextControl, std::string buttonV
     }
 }
 
-void ButtonGrid::HandleDecimal(wxTextCtrl *currentTextControl, std::string buttonValue)
+void ButtonGrid::HandleDecimal(wxTextCtrl *currentTextControl)
 {
     std::string currentValue = currentTextControl->GetValue().wxString::ToStdString();
-    if (currentValue.length() < 9 && currentValue.find(buttonValue) == std::string::npos)
+    if (currentValue.length() < 9 && currentValue.length() >= 1 && !(currentValue == "0" || currentValue == "Error"))
     {
-        // REMOVE THE DEFAULT "0" VALUE OR "Error" MESSAGE
-        if (currentValue == "0" || currentValue == "Error")
-            currentValue = "";
+        if (currentValue.find('.') == std::string::npos)
+        {
+            const std::string textValue = currentValue.insert(currentValue.size(), 1, '.');
+            currentTextControl->SetValue(textValue);
+        }
+    }
+}
 
-        const std::string textValue = currentValue.append(buttonValue);
-        currentTextControl->SetValue(textValue);
+void ButtonGrid::HandleNegate(wxTextCtrl *currentTextControl)
+{
+    std::string currentValue = currentTextControl->GetValue().wxString::ToStdString();
+    if (currentValue.length() < 9 && currentValue.length() >= 1 && !(currentValue == "0" || currentValue == "Error"))
+    {
+        if (ButtonGrid::isNegative && currentValue[0] == '-')
+        {
+            ButtonGrid::isNegative = false;
+            const std::string textValue = currentValue.erase(0, 1);
+            currentTextControl->SetValue(textValue);
+        }
+        else if (currentValue.find('-') == std::string::npos)
+        {
+            ButtonGrid::isNegative = true;
+            const std::string textValue = currentValue.insert(0, 1, '-');
+            currentTextControl->SetValue(textValue);
+        }
     }
 }
 
@@ -231,7 +247,7 @@ void ButtonGrid::HandleEvaluate(wxTextCtrl *lastTextControl, wxTextCtrl *current
         currentValue = "";
         for (char &character : temp)
         {
-            std::string allowed = "0123456789.";
+            std::string allowed = "0123456789.-";
             if (allowed.find(character) != std::string::npos)
                 currentValue.push_back(character);
         }

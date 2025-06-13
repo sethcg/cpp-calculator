@@ -20,12 +20,14 @@ public:
     ButtonGrid(wxWindow *parent, wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl);
 
 private:
+    bool isNegative = false;
     OperationType operationType = OperationType::NONE;
 
     void CreateButton(wxGridSizer *container, CalculatorButton *button);
 
     void HandleDigit(wxTextCtrl *currentTextControl, std::string buttonValue);
-    void HandleDecimal(wxTextCtrl *currentTextControl, std::string buttonValue);
+    void HandleDecimal(wxTextCtrl *currentTextControl);
+    void HandleNegate(wxTextCtrl *currentTextControl);
     void HandleDelete(wxTextCtrl *currentTextControl);
     void HandleClear(wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl);
     void HandleAction(wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl, OperationType type);
