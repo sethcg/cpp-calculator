@@ -14,7 +14,7 @@ message(STATUS "Fetching wxWidgets...")
 FetchContent_Declare(
    wxWidgets
    GIT_REPOSITORY https://github.com/wxWidgets/wxWidgets.git
-   GIT_TAG v3.3.0-rc1   # LATEST PRE-RELEASE
+   GIT_TAG v3.3.0   # LATEST PRE-RELEASE
    GIT_SHALLOW ON
 )
 FetchContent_MakeAvailable(wxWidgets)
@@ -34,7 +34,8 @@ PRIVATE
    ./src/ButtonGrid.h
    ./src/TextControl.h
    ./src/CalculatorButton.h
-   ./src/colors/Colors.h
+   ./src/constants/Colors.h
+   ./src/constants/Buttons.h
 )
 
 target_include_directories(main

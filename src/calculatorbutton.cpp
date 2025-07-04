@@ -1,5 +1,5 @@
 #include <wx/wx.h>
-#include <colors/Colors.h>
+#include <constants/Colors.h>
 #include <CalculatorButton.h>
 
 CalculatorButton::CalculatorButton(std::function<void()> onClick, wxWindow *parent, wxTextCtrl *textControl, const wxString &label,

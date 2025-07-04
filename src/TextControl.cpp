@@ -1,5 +1,5 @@
 #include <wx/wx.h>
-#include <colors/Colors.h>
+#include <constants/Colors.h>
 #include <TextControl.h>
 
 TextControl::TextControl(wxWindow *parent, wxString defaultValue)

@@ -1,6 +1,6 @@
 #include <wx/wx.h>
 #include <vector>
-#include <colors/Colors.h>
+#include <constants/Colors.h>
 #include <TextControl.h>
 #include <CalculatorButton.h>
 #include <ButtonGrid.h>

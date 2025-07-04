@@ -3,9 +3,10 @@
 #include <format>
 #include <wx/wx.h>
 #include <ctype.h>
-#include <colors/Colors.h>
-#include <CalculatorButton.h>
+#include <constants/Colors.h>
+#include <constants/Buttons.h>
 #include <ButtonGrid.h>
+#include <CalculatorButton.h>
 
 ButtonGrid::ButtonGrid(wxWindow *parent, wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl)
     : wxGridSizer(BUTTON_CONTAINER_ROWS, BUTTON_CONTAINER_COLS, 0, 0)
