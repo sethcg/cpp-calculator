@@ -25,17 +25,19 @@ add_executable(main WIN32 ${MAIN_FILE})
 
 target_sources(main
 PRIVATE
+   # HEADER FILES
+   ./src/constants/Colors.hpp
+   ./src/constants/Buttons.hpp
+   ./src/TextControl.hpp
+   ./src/CalculatorButton.hpp
+   ./src/ButtonGrid.hpp
+
+   # SOURCE CODE FILES
    ${MAIN_FILE}
 
    ./src/ButtonGrid.cpp
    ./src/TextControl.cpp
    ./src/CalculatorButton.cpp
-
-   ./src/ButtonGrid.h
-   ./src/TextControl.h
-   ./src/CalculatorButton.h
-   ./src/constants/Colors.h
-   ./src/constants/Buttons.h
 )
 
 target_include_directories(main

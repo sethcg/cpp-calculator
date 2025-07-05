@@ -1,6 +1,6 @@
 #pragma once
 #include <wx/wx.h>
-#include <constants/Colors.h>
+#include <constants/Colors.hpp>
 
 class CalculatorButton : public wxButton
 {

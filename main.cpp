@@ -1,9 +1,9 @@
 #include <wx/wx.h>
 #include <vector>
-#include <constants/Colors.h>
-#include <TextControl.h>
-#include <CalculatorButton.h>
-#include <ButtonGrid.h>
+#include <constants/Colors.hpp>
+#include <TextControl.hpp>
+#include <CalculatorButton.hpp>
+#include <ButtonGrid.hpp>
 
 class MyApp : public wxApp
 {

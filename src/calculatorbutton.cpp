@@ -1,6 +1,6 @@
 #include <wx/wx.h>
-#include <constants/Colors.h>
-#include <CalculatorButton.h>
+#include <constants/Colors.hpp>
+#include <CalculatorButton.hpp>
 
 CalculatorButton::CalculatorButton(std::function<void()> onClick, wxWindow *parent, wxTextCtrl *textControl, const wxString &label,
                                    const wxColor &backgroundColor, const wxColor &textColor)

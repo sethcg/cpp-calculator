@@ -1,6 +1,6 @@
 #include <wx/wx.h>
-#include <constants/Colors.h>
-#include <TextControl.h>
+#include <constants/Colors.hpp>
+#include <TextControl.hpp>
 
 TextControl::TextControl(wxWindow *parent, wxString defaultValue)
     : wxTextCtrl()
