@@ -1,5 +1,6 @@
 #pragma once
 #include <wx/wx.h>
+#include <CalculatorButton.h>
 
 inline const int BUTTON_CONTAINER_ROWS = 5;
 inline const int BUTTON_CONTAINER_COLS = 4;

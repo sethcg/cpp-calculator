@@ -2,8 +2,6 @@
 #include <wx/wx.h>
 #include <constants/Colors.h>
 
-using CalculatorButton = typename CalculatorButton::wxButton;
-
 class CalculatorButton : public wxButton
 {
 public:
