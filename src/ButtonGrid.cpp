@@ -3,6 +3,8 @@
 #include <format>
 #include <wx/wx.h>
 #include <ctype.h>
+#include <iostream>
+#include <type_traits>
 #include <constants/Colors.hpp>
 #include <constants/Buttons.hpp>
 #include <CalculatorButton.hpp>
@@ -95,7 +97,7 @@ void ButtonGrid::HandleDigit(wxTextCtrl *currentTextControl, std::string buttonV
     if (currentValue.length() < 9)
     {
         // REMOVE THE DEFAULT "0" VALUE OR "Error" MESSAGE
-        if (currentValue == "0" || currentValue == "Error")
+        if (currentValue == "0" || currentValue == "Error" || currentValue == "NAN")
             currentValue = "";
 
         const std::string textValue = currentValue.append(buttonValue);
@@ -106,7 +108,7 @@ void ButtonGrid::HandleDigit(wxTextCtrl *currentTextControl, std::string buttonV
 void ButtonGrid::HandleDecimal(wxTextCtrl *currentTextControl)
 {
     std::string currentValue = currentTextControl->GetValue().wxString::ToStdString();
-    if (currentValue.length() < 9 && currentValue.length() >= 1 && !(currentValue == "0" || currentValue == "Error"))
+    if (currentValue.length() < 9 && currentValue.length() >= 1 && !(currentValue == "0" || currentValue == "Error" || currentValue == "NAN"))
     {
         if (currentValue.find('.') == std::string::npos)
         {
@@ -142,7 +144,7 @@ void ButtonGrid::HandleDelete(wxTextCtrl *currentTextControl)
     if (currentValue == "0")
         return;
 
-    if (currentValue.length() == 1)
+    if (currentValue.length() == 1 || currentValue == "NAN")
     {
         currentTextControl->SetValue("0");
         return;
@@ -156,14 +158,14 @@ void ButtonGrid::HandleDelete(wxTextCtrl *currentTextControl)
 
 void ButtonGrid::HandleClear(wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl)
 {
-    operationType = OperationType::NONE;
+    ButtonGrid::operationType = OperationType::NONE;
     lastTextControl->SetValue(wxEmptyString);
     currentTextControl->SetValue("0");
 }
 
 void ButtonGrid::HandleAction(wxTextCtrl *lastTextControl, wxTextCtrl *currentTextControl, OperationType type)
 {
-    if (operationType == OperationType::EQUAL)
+    if (ButtonGrid::operationType == OperationType::EQUAL)
         lastTextControl->SetValue(wxEmptyString);
 
     if (lastTextControl->GetValue().length() > 0)
@@ -188,30 +190,36 @@ void ButtonGrid::HandleAction(wxTextCtrl *lastTextControl, wxTextCtrl *currentTe
         currentTextControl->SetValue("0");
         break;
     case OperationType::SUBTRACT:
-        operationType = OperationType::SUBTRACT;
+        ButtonGrid::operationType = OperationType::SUBTRACT;
         stringResult.push_back(' ');
         stringResult.push_back(BUTTON_STRING_SUBTRACT[0]);
         lastTextControl->SetValue(stringResult);
         currentTextControl->SetValue("0");
         break;
     case OperationType::MULTIPLY:
-        operationType = OperationType::MULTIPLY;
+        ButtonGrid::operationType = OperationType::MULTIPLY;
         stringResult.push_back(' ');
         stringResult.push_back(BUTTON_STRING_MULTIPLY[0]);
         lastTextControl->SetValue(stringResult);
         currentTextControl->SetValue("0");
         break;
     case OperationType::DIVIDE:
-        operationType = OperationType::DIVIDE;
+        ButtonGrid::operationType = OperationType::DIVIDE;
         stringResult.push_back(' ');
         stringResult.push_back(BUTTON_STRING_DIVIDE[0]);
         lastTextControl->SetValue(stringResult);
         currentTextControl->SetValue("0");
         break;
     case OperationType::PERCENT:
-        operationType = OperationType::EQUAL;
+        ButtonGrid::operationType = OperationType::EQUAL;
         currentValueDouble = std::stod(currentValue);
         doubleResult = currentValueDouble / 100;
+        if (std::isnan(doubleResult) || std::isinf(doubleResult))
+        {
+            lastTextControl->SetValue(wxEmptyString);
+            currentTextControl->SetValue("NAN");
+            break;
+        }
         stringResult = std::format("{:g}", doubleResult);
         lastTextControl->SetValue(stringResult);
         currentTextControl->SetValue(stringResult);
@@ -283,10 +291,16 @@ void ButtonGrid::HandleEvaluate(wxTextCtrl *lastTextControl, wxTextCtrl *current
 
         // RESET THE CONTROLS
         ButtonGrid::operationType = OperationType::EQUAL;
-
-        // ROUND RESULT BY DEFAULT (REMOVE TRAILING ZEROS)
-        std::string stringResult = std::format("{:g}", result);
-        currentTextControl->SetValue(stringResult);
+        if (std::isnan(result) || std::isinf(result))
+        {
+            currentTextControl->SetValue("NAN");
+        }
+        else
+        {
+            // ROUND RESULT BY DEFAULT (REMOVE TRAILING ZEROS)
+            std::string stringResult = std::format("{:g}", result);
+            currentTextControl->SetValue(stringResult);
+        }
     }
     catch (int exception)
     {
