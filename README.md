@@ -2,7 +2,7 @@
 
 ## Description:
 
-This is a C++ calculator, it does all the things a simple calculator should do including add, subtract, divide, multiply, and some additional functionality like clearing, deleting, and percentages.
+This is a C++ calculator, it does all the things a simple calculator should do including add, subtract, divide, multiply, and some additional features like decimal, delete, and percent buttons.
 
 ---
 
